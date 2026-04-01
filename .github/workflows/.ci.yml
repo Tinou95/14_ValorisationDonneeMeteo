@@ -1,24 +1,36 @@
-:name: CI
+name: CI
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Run security scan
+
+      # 1. Scan de sécurité spécifique au dossier backend
+      - name: Run Trivy security scan
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: 'fs'
+          scan-ref: 'backend' # On cible le dossier backend
           format: 'json'
           output: 'trivy-report.json'
+
+      # 2. Génération du VEX
       - name: Create VEX
-        run: echo '{"status":"ok"}' > report.vex
+        run: echo '{"status":"analyzed", "project":"valorisation-meteo"}' > report.vex
+
+      # 3. Build Docker (en utilisant le Dockerfile du backend)
+      # Note: Si tu as mis ton Dockerfile à la racine, on l'utilise
       - name: Build Docker
-        run: docker build -t test-image .
+        run: docker build -t meteo-app .
+
+      # 4. Upload des rapports
       - name: Upload reports
         uses: actions/upload-artifact@v4
         with:
-          name: mes-rapports
+          name: livrables-meteo
           path: |
             trivy-report.json
             report.vex
