@@ -1,3 +1,5 @@
+# ![CI Status](https://github.com/Tinou95/mon-projet-pipelin/actions/workflows/ci.yml/badge.svg) Valorisation Donnée Météo
+
 # Valorisation Donnée Météo
 
 Projet Data For Good - Saison 14
